@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  benchmark-node:
+    build: .
+    image: benchmark-node:latest
+    container_name: benchmark-node
+    command: node src/main.js
+    ports:
+      - 8000:8000
+    networks:
+      - default
+
+networks:
+  default:
+    name: benchmark-net

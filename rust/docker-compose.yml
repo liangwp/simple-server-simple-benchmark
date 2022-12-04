@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  benchmark-rust:
+    build: .
+    image: benchmark-rust:latest
+    container_name: benchmark-rust
+    # command: /workspace/target/release/rust
+    command: cargo run --release
+    environment:
+      - ROCKET_ADDRESS="0.0.0.0"
+      - ROCKET_PORT=8000
+      - ROCKET_LOG_LEVEL="critical"
+    ports:
+      - 8000:8000
+    networks:
+      - default
+
+networks:
+  default:
+    name: benchmark-net

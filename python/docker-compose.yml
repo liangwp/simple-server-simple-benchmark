@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  benchmark-python:
+    build: .
+    image: benchmark-python:latest
+    container_name: benchmark-python
+    command: python src/main.py
+    ports:
+      - 8000:8000
+    networks:
+      - default
+
+networks:
+  default:
+    name: benchmark-net
