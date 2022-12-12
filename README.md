@@ -1,96 +1,48 @@
-# A Really Basic Benchmark Of Some Web Frameworks
+# A Really Simple Benchmark Of Some Web Frameworks
 
 - Basic servers for Python, NodeJS, and Rust, each implemented to run in docker
     - Python: FastAPI + uvicorn
     - NodeJS: ExpressJS
     - Rust: Rocket.rs
-- Each server is set up with a single route. When called it counts from 0 to 2,000,000, then sends a
-  json response
-- We use a simple shell script running on the docker host, that curls the servers 100 times in a
-  loop.
+- Each server is set up with a single route. When called, the server counts from 0 to 100,000, then
+  returns a json response.
+- Each server is set up to listen on host port 8000
+  - Each folder contains a `docker-compose.yml`
+  - Run `docker-compose up --build` to start the server
+  - Run `docker-compose down` to stop it
+- We have a shell script `./curl_loop.sh` on the docker host
+  - This script generates a curl command to call a server 1000 times in a single http connection
+    (attempting to reduce both bash and http overhead)
+  - It then prints out the execution time of the script
+- Each time we start a different server for testing, we only keep the timing for the **2nd** run of
+  the `curl_loop.sh`. In theory, this should exclude the time for whatever jit compilation that
+  the frameworks might perform.
 
 ## Results
 
-Python: ~4.5 seconds
+Tests are run on a single linux laptop, on this particular config of hardware and software that we
+shall not concern ourselves with.
 
-```
-time ./curl_loop.sh 
+* Python: ~2 seconds
 
-real	0m4.553s
-user	0m0.235s
-sys	0m0.095s
-```
+  ```
+  real	0m2.014s
+  user	0m0.045s
+  sys	0m0.026s
+  ```
 
-NodeJS: ~0.43 seconds
+* NodeJS: ~0.23 seconds
 
-```
-time ./curl_loop.sh 
+  ```
+  real	0m0.233s
+  user	0m0.028s
+  sys	0m0.025s
+  ```
 
-real	0m0.430s
-user	0m0.192s
-sys	0m0.104s
-```
+* Rust: ~0.09 seconds
 
-NodeJS: ~0.30 seconds
-
-```
-time ./curl_loop.sh 
-
-real	0m0.296s
-user	0m0.177s
-sys	0m0.089s
-```
-
-### Python Test
-
-Start server:
-```bash
-cd python
-docker-compose up --build
-```
-
-Another terminal:
-```bash
-./curl_loop.sh
-```
-
-Clean up:
-```bash
-docker-compose down
-```
-
-### NodeJS Test
-
-Start server:
-```bash
-cd nodejs
-docker-compose up --build
-```
-
-Another terminal:
-```bash
-./curl_loop.sh
-```
-
-Clean up:
-```bash
-docker-compose down
-```
-
-### Rust Test
-
-Start server:
-```bash
-cd rust
-docker-compose up --build
-```
-
-Another terminal:
-```bash
-./curl_loop.sh
-```
-
-Clean up:
-```bash
-docker-compose down
-```
+  ```
+  real	0m0.091s
+  user	0m0.035s
+  sys	0m0.016s
+  ```
