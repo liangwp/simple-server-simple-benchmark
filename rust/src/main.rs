@@ -5,7 +5,7 @@ use rocket::serde::json::{Value, json};
 #[get("/")]
 fn index() -> Value {
     let mut counter = 0;
-    let counter_max = 2_000_000;
+    let counter_max = 100_000;
     while counter < counter_max {
         counter += 1;
     }

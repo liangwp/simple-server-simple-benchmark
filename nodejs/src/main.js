@@ -7,7 +7,7 @@ var app = express();
 app.get('/', (req, res, next) => {
     // a cpu-bound loop
     let counter = 0;
-    let counter_max = 2_000_000;
+    let counter_max = 100_000;
     while (counter < counter_max) {
         counter += 1;
     }

@@ -8,7 +8,7 @@ app = FastAPI()
 async def read_root():
     # a cpu-bound loop
     counter = 0
-    counter_max = 2_000_000
+    counter_max = 100_000
     while counter < counter_max:
         counter += 1
     return { 'hello': 'world' }
